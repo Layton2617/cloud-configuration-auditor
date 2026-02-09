@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CSPM EC2.13/EC2.14 security-group checks as AWS Config custom Lambda rules. Requires an existing Config recorder.
+
+Parameters:
+  CodeBucket:
+    Type: String
+    Description: S3 bucket holding the deployment zip (lambda_function.py + cspm.py)
+  CodeKey:
+    Type: String
+    Default: cspm-config-rule.zip
+
+Resources:
+  RuleFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: config-evaluations
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                # GetResourceConfigHistory is only used for oversized configuration items.
+                Action: [config:PutEvaluations, config:GetResourceConfigHistory]
+                Resource: "*"
+
+  RuleFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.12
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt RuleFunctionRole.Arn
+      Timeout: 30
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: !Ref CodeKey
+
+  ConfigInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt RuleFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: config.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+
+  SshRule:
+    Type: AWS::Config::ConfigRule
+    DependsOn: ConfigInvokePermission
+    Properties:
+      ConfigRuleName: cspm-ec2-13-unrestricted-ssh
+      InputParameters: { port: "22" }
+      Scope:
+        ComplianceResourceTypes: [AWS::EC2::SecurityGroup]
+      Source:
+        Owner: CUSTOM_LAMBDA
+        SourceIdentifier: !GetAtt RuleFunction.Arn
+        SourceDetails:
+          - { EventSource: aws.config, MessageType: ConfigurationItemChangeNotification }
+          - { EventSource: aws.config, MessageType: OversizedConfigurationItemChangeNotification }
+
+  RdpRule:
+    Type: AWS::Config::ConfigRule
+    DependsOn: ConfigInvokePermission
+    Properties:
+      ConfigRuleName: cspm-ec2-14-unrestricted-rdp
+      InputParameters: { port: "3389" }
+      Scope:
+        ComplianceResourceTypes: [AWS::EC2::SecurityGroup]
+      Source:
+        Owner: CUSTOM_LAMBDA
+        SourceIdentifier: !GetAtt RuleFunction.Arn
+        SourceDetails:
+          - { EventSource: aws.config, MessageType: ConfigurationItemChangeNotification }
+          - { EventSource: aws.config, MessageType: OversizedConfigurationItemChangeNotification }

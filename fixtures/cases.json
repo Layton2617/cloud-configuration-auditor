@@ -665,5 +665,383 @@
       "EC2.13": "UNKNOWN",
       "EC2.14": "UNKNOWN"
     }
+  },
+  {
+    "id": "gcp-ssh-open",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-ssh-open",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "22"
+              ]
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "FAILED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-ssh-range",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-ssh-range",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "20-30"
+              ]
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "FAILED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-all-protocols",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-all-protocols",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "all"
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "FAILED",
+      "GCP.FW.2": "FAILED"
+    }
+  },
+  {
+    "id": "gcp-tcp-no-ports",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-tcp-no-ports",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "tcp"
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "FAILED",
+      "GCP.FW.2": "FAILED"
+    }
+  },
+  {
+    "id": "gcp-rdp-ipv6",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-rdp-ipv6",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "::/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "3389"
+              ]
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "FAILED"
+    }
+  },
+  {
+    "id": "gcp-udp-22",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-udp-22",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "udp",
+              "ports": [
+                "22"
+              ]
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-private-source",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-private-source",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "10.0.0.0/8"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "22"
+              ]
+            }
+          ],
+          "disabled": false
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-source-tags-only",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-source-tags-only",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "22"
+              ]
+            }
+          ],
+          "disabled": false,
+          "sourceTags": [
+            "bastion"
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-egress",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-egress",
+          "network": "global/networks/default",
+          "direction": "EGRESS",
+          "priority": 1000,
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "22"
+              ]
+            }
+          ],
+          "disabled": false,
+          "destinationRanges": [
+            "0.0.0.0/0"
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-disabled",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-disabled",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "allowed": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "22"
+              ]
+            }
+          ],
+          "disabled": true
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-deny-rule",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-deny-rule",
+          "network": "global/networks/default",
+          "direction": "INGRESS",
+          "priority": 1000,
+          "sourceRanges": [
+            "0.0.0.0/0"
+          ],
+          "disabled": false,
+          "denied": [
+            {
+              "IPProtocol": "tcp",
+              "ports": [
+                "22"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "PASSED",
+      "GCP.FW.2": "PASSED"
+    }
+  },
+  {
+    "id": "gcp-collection-error",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [],
+      "gcp_firewall_rules": [
+        {
+          "name": "gcp-collection-error",
+          "CollectionError": {
+            "Code": "PERMISSION_DENIED"
+          }
+        }
+      ]
+    },
+    "expected": {
+      "GCP.FW.1": "UNKNOWN",
+      "GCP.FW.2": "UNKNOWN"
+    }
   }
 ]

@@ -1,7 +1,7 @@
 {
   "scope": "Hand-authored synthetic regression cases, not a held-out accuracy benchmark.",
-  "cases": 27,
-  "matched": 27,
+  "cases": 39,
+  "matched": 39,
   "outcomes": [
     {
       "id": "admin-string",
@@ -290,6 +290,150 @@
       "actual": {
         "EC2.13": "UNKNOWN",
         "EC2.14": "UNKNOWN"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-ssh-open",
+      "expected": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-ssh-range",
+      "expected": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-all-protocols",
+      "expected": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "FAILED"
+      },
+      "actual": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-tcp-no-ports",
+      "expected": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "FAILED"
+      },
+      "actual": {
+        "GCP.FW.1": "FAILED",
+        "GCP.FW.2": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-rdp-ipv6",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "FAILED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-udp-22",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-private-source",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-source-tags-only",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-egress",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-disabled",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-deny-rule",
+      "expected": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "actual": {
+        "GCP.FW.1": "PASSED",
+        "GCP.FW.2": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "gcp-collection-error",
+      "expected": {
+        "GCP.FW.1": "UNKNOWN",
+        "GCP.FW.2": "UNKNOWN"
+      },
+      "actual": {
+        "GCP.FW.1": "UNKNOWN",
+        "GCP.FW.2": "UNKNOWN"
       },
       "matched": true
     }

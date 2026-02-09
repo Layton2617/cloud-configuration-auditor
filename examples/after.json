@@ -1,6 +1,9 @@
 {
   "mode": "offline_snapshot",
   "source": "local repair simulation; not AWS state",
+  "collection_errors": [],
+  "collection_scope": "user-supplied resources only",
+  "collected_at": null,
   "summary": {
     "FAILED": 2,
     "PASSED": 2
@@ -12,6 +15,10 @@
       "status": "FAILED",
       "control_severity": "High",
       "title": "IAM policies should not allow full administrative privileges",
+      "standards": [
+        "CIS AWS v1.2.0/1.22",
+        "CIS AWS v1.4.0/1.16"
+      ],
       "evidence": {
         "statements": [
           {
@@ -30,6 +37,11 @@
       "status": "PASSED",
       "control_severity": "High",
       "title": "S3 buckets should block public access at the bucket level",
+      "standards": [
+        "CIS AWS v1.4.0/2.1.5",
+        "CIS AWS v3.0.0/2.1.4",
+        "CIS AWS v5.0.0/2.1.4"
+      ],
       "evidence": {
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
@@ -48,6 +60,9 @@
       "status": "FAILED",
       "control_severity": "High",
       "title": "Security groups should not allow unrestricted SSH ingress",
+      "standards": [
+        "CIS AWS v1.2.0/4.1"
+      ],
       "evidence": {
         "rules": [
           {
@@ -73,6 +88,9 @@
       "status": "PASSED",
       "control_severity": "High",
       "title": "Security groups should not allow unrestricted RDP ingress",
+      "standards": [
+        "CIS AWS v1.2.0/4.2"
+      ],
       "evidence": {
         "rules": [],
         "unresolved_prefix_lists": []
@@ -81,5 +99,5 @@
       "remediation": "Remove the world-open ingress rule or restrict it to the required source network after reviewing legitimate access requirements."
     }
   ],
-  "scope": "Four configuration checks across supplied resources, not an account-wide security assessment. Control IDs indicate the targeted AWS rule semantics; this tool is not Security Hub."
+  "scope": "Configuration checks across supplied resources, not an account-wide security assessment. AWS control IDs indicate the targeted Security Hub rule semantics; GCP.FW IDs are this project's own. This tool is not Security Hub."
 }

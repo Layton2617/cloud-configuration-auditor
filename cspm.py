@@ -1,4 +1,4 @@
-"""Evaluate saved AWS configuration snapshots; no AWS calls or credentials."""
+"""Evaluate saved AWS and GCP configuration snapshots; no cloud calls or credentials."""
 
 import argparse
 from collections import Counter
@@ -11,19 +11,28 @@ BPA_FLAGS = (
     "BlockPublicAcls", "IgnorePublicAcls", "BlockPublicPolicy", "RestrictPublicBuckets"
 )
 CONTROLS = {
-    "IAM.1": ("High", "IAM policies should not allow full administrative privileges"),
-    "S3.8": ("High", "S3 buckets should block public access at the bucket level"),
-    "EC2.13": ("High", "Security groups should not allow unrestricted SSH ingress"),
-    "EC2.14": ("High", "Security groups should not allow unrestricted RDP ingress"),
+    "IAM.1": ("High", "IAM policies should not allow full administrative privileges",
+              ["CIS AWS v1.2.0/1.22", "CIS AWS v1.4.0/1.16"]),
+    "S3.8": ("High", "S3 buckets should block public access at the bucket level",
+             ["CIS AWS v1.4.0/2.1.5", "CIS AWS v3.0.0/2.1.4", "CIS AWS v5.0.0/2.1.4"]),
+    "EC2.13": ("High", "Security groups should not allow unrestricted SSH ingress",
+               ["CIS AWS v1.2.0/4.1"]),
+    "EC2.14": ("High", "Security groups should not allow unrestricted RDP ingress",
+               ["CIS AWS v1.2.0/4.2"]),
+    "GCP.FW.1": ("High", "VPC firewall rules should not allow unrestricted SSH ingress",
+                 ["CIS GCP 3.6"]),
+    "GCP.FW.2": ("High", "VPC firewall rules should not allow unrestricted RDP ingress",
+                 ["CIS GCP 3.7"]),
 }
+WORLD = ("0.0.0.0/0", "::/0")
 
 
 def result(control, resource, status, evidence, explanation, remediation):
-    severity, title = CONTROLS[control]
+    severity, title, standards = CONTROLS[control]
     return {
         "control_id": control, "resource": resource, "status": status,
-        "control_severity": severity, "title": title, "evidence": evidence,
-        "explanation": explanation, "remediation": remediation,
+        "control_severity": severity, "title": title, "standards": standards,
+        "evidence": evidence, "explanation": explanation, "remediation": remediation,
     }
 
 
@@ -101,7 +110,7 @@ def check_group(group, port):
         unresolved += permission.get("PrefixListIds", [])
         sources = [entry["CidrIp"] for entry in permission.get("IpRanges", [])]
         sources += [entry["CidrIpv6"] for entry in permission.get("Ipv6Ranges", [])]
-        if any(source in ("0.0.0.0/0", "::/0") for source in sources):
+        if any(source in WORLD for source in sources):
             matches.append(permission)
     status = "FAILED" if matches else "UNKNOWN" if unresolved else "PASSED"
     return result(
@@ -114,18 +123,54 @@ def check_group(group, port):
     )
 
 
+def gcp_port_covered(ports, port):
+    if not ports:
+        return True
+    for entry in ports:
+        low, _, high = entry.partition("-")
+        if int(low) <= port <= int(high or low):
+            return True
+    return False
+
+
+def check_firewall(rule, port):
+    control = "GCP.FW.1" if port == 22 else "GCP.FW.2"
+    if "CollectionError" in rule:
+        return result(control, rule["name"], "UNKNOWN", rule["CollectionError"],
+                      "Firewall rule collection failed; no pass or fail can be assigned.", "")
+    world = [source for source in rule.get("sourceRanges", []) if source in WORLD]
+    matches = []
+    if rule.get("direction", "INGRESS") == "INGRESS" and not rule.get("disabled", False) and world:
+        matches = [entry for entry in rule.get("allowed", [])
+                   if entry["IPProtocol"] in ("tcp", "6", "all")
+                   and gcp_port_covered(entry.get("ports"), port)]
+    return result(
+        control, rule["name"], "FAILED" if matches else "PASSED",
+        {"network": rule.get("network"), "priority": rule.get("priority"),
+         "sourceRanges": world, "allowed": matches, "targetTags": rule.get("targetTags", [])},
+        f"Checks one enabled ingress rule for world-open TCP access covering port {port}. "
+        "Higher-priority deny rules, hierarchical and network firewall policies, and "
+        "instance external IPs are not evaluated.",
+        "Restrict sourceRanges to trusted networks (for example the IAP TCP forwarding range "
+        "35.235.240.0/20) or delete the rule after reviewing legitimate access requirements.",
+    )
+
+
 def scan(snapshot):
     checks = [check_policy(policy) for policy in snapshot["iam_policies"]]
     checks += [check_bucket(bucket) for bucket in snapshot["s3_buckets"]]
     checks += [check_group(group, port) for group in snapshot["security_groups"] for port in (22, 3389)]
+    checks += [check_firewall(rule, port) for rule in snapshot.get("gcp_firewall_rules", [])
+               for port in (22, 3389)]
     return {
         "mode": "offline_snapshot", "source": snapshot.get("source", "user-supplied snapshot"),
         "collection_errors": snapshot.get("collection_errors", []),
         "collection_scope": snapshot.get("scope", "user-supplied resources only"),
         "collected_at": snapshot.get("collected_at"),
         "summary": dict(Counter(check["status"] for check in checks)), "checks": checks,
-        "scope": "Four configuration checks across supplied resources, not an account-wide security assessment. "
-                 "Control IDs indicate the targeted AWS rule semantics; this tool is not Security Hub.",
+        "scope": "Configuration checks across supplied resources, not an account-wide security assessment. "
+                 "AWS control IDs indicate the targeted Security Hub rule semantics; GCP.FW IDs are this "
+                 "project's own. This tool is not Security Hub.",
     }
 
 
@@ -173,6 +218,7 @@ def markdown(report):
               "```json", json.dumps(report['collection_errors'], indent=2), "```", ""]
     for check in report["checks"]:
         lines += [f"## {check['control_id']} {check['status']} {check['resource']}", "",
+                  f"Standards: {', '.join(check['standards'])}", "",
                   check["explanation"], "", "```json",
                   json.dumps(check["evidence"], indent=2), "```", ""]
         if check["status"] == "FAILED":

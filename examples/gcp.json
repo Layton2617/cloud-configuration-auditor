@@ -1,0 +1,105 @@
+{
+  "mode": "offline_snapshot",
+  "source": "synthetic GCP demo; no real GCP resources",
+  "collection_errors": [],
+  "collection_scope": "user-supplied resources only",
+  "collected_at": null,
+  "summary": {
+    "FAILED": 1,
+    "PASSED": 3
+  },
+  "checks": [
+    {
+      "control_id": "GCP.FW.1",
+      "resource": "allow-ssh-from-anywhere",
+      "status": "FAILED",
+      "control_severity": "High",
+      "title": "VPC firewall rules should not allow unrestricted SSH ingress",
+      "standards": [
+        "CIS GCP 3.6"
+      ],
+      "evidence": {
+        "network": "global/networks/default",
+        "priority": 1000,
+        "sourceRanges": [
+          "0.0.0.0/0"
+        ],
+        "allowed": [
+          {
+            "IPProtocol": "tcp",
+            "ports": [
+              "22"
+            ]
+          }
+        ],
+        "targetTags": [
+          "web"
+        ]
+      },
+      "explanation": "Checks one enabled ingress rule for world-open TCP access covering port 22. Higher-priority deny rules, hierarchical and network firewall policies, and instance external IPs are not evaluated.",
+      "remediation": "Restrict sourceRanges to trusted networks (for example the IAP TCP forwarding range 35.235.240.0/20) or delete the rule after reviewing legitimate access requirements."
+    },
+    {
+      "control_id": "GCP.FW.2",
+      "resource": "allow-ssh-from-anywhere",
+      "status": "PASSED",
+      "control_severity": "High",
+      "title": "VPC firewall rules should not allow unrestricted RDP ingress",
+      "standards": [
+        "CIS GCP 3.7"
+      ],
+      "evidence": {
+        "network": "global/networks/default",
+        "priority": 1000,
+        "sourceRanges": [
+          "0.0.0.0/0"
+        ],
+        "allowed": [],
+        "targetTags": [
+          "web"
+        ]
+      },
+      "explanation": "Checks one enabled ingress rule for world-open TCP access covering port 3389. Higher-priority deny rules, hierarchical and network firewall policies, and instance external IPs are not evaluated.",
+      "remediation": "Restrict sourceRanges to trusted networks (for example the IAP TCP forwarding range 35.235.240.0/20) or delete the rule after reviewing legitimate access requirements."
+    },
+    {
+      "control_id": "GCP.FW.1",
+      "resource": "allow-rdp-from-iap",
+      "status": "PASSED",
+      "control_severity": "High",
+      "title": "VPC firewall rules should not allow unrestricted SSH ingress",
+      "standards": [
+        "CIS GCP 3.6"
+      ],
+      "evidence": {
+        "network": "global/networks/default",
+        "priority": 1000,
+        "sourceRanges": [],
+        "allowed": [],
+        "targetTags": []
+      },
+      "explanation": "Checks one enabled ingress rule for world-open TCP access covering port 22. Higher-priority deny rules, hierarchical and network firewall policies, and instance external IPs are not evaluated.",
+      "remediation": "Restrict sourceRanges to trusted networks (for example the IAP TCP forwarding range 35.235.240.0/20) or delete the rule after reviewing legitimate access requirements."
+    },
+    {
+      "control_id": "GCP.FW.2",
+      "resource": "allow-rdp-from-iap",
+      "status": "PASSED",
+      "control_severity": "High",
+      "title": "VPC firewall rules should not allow unrestricted RDP ingress",
+      "standards": [
+        "CIS GCP 3.7"
+      ],
+      "evidence": {
+        "network": "global/networks/default",
+        "priority": 1000,
+        "sourceRanges": [],
+        "allowed": [],
+        "targetTags": []
+      },
+      "explanation": "Checks one enabled ingress rule for world-open TCP access covering port 3389. Higher-priority deny rules, hierarchical and network firewall policies, and instance external IPs are not evaluated.",
+      "remediation": "Restrict sourceRanges to trusted networks (for example the IAP TCP forwarding range 35.235.240.0/20) or delete the rule after reviewing legitimate access requirements."
+    }
+  ],
+  "scope": "Configuration checks across supplied resources, not an account-wide security assessment. AWS control IDs indicate the targeted Security Hub rule semantics; GCP.FW IDs are this project's own. This tool is not Security Hub."
+}

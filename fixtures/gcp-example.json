@@ -1,0 +1,47 @@
+{
+  "source": "synthetic GCP demo; no real GCP resources",
+  "iam_policies": [],
+  "s3_buckets": [],
+  "security_groups": [],
+  "gcp_firewall_rules": [
+    {
+      "name": "allow-ssh-from-anywhere",
+      "network": "global/networks/default",
+      "direction": "INGRESS",
+      "priority": 1000,
+      "sourceRanges": [
+        "0.0.0.0/0"
+      ],
+      "allowed": [
+        {
+          "IPProtocol": "tcp",
+          "ports": [
+            "22"
+          ]
+        }
+      ],
+      "disabled": false,
+      "targetTags": [
+        "web"
+      ]
+    },
+    {
+      "name": "allow-rdp-from-iap",
+      "network": "global/networks/default",
+      "direction": "INGRESS",
+      "priority": 1000,
+      "sourceRanges": [
+        "35.235.240.0/20"
+      ],
+      "allowed": [
+        {
+          "IPProtocol": "tcp",
+          "ports": [
+            "3389"
+          ]
+        }
+      ],
+      "disabled": false
+    }
+  ]
+}

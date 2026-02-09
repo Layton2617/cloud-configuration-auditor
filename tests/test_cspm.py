@@ -59,6 +59,14 @@ class CSPMTests(unittest.TestCase):
         repair = subprocess.run([sys.executable, str(ROOT / 'cspm.py'), 'simulate-s3', str(ROOT / 'fixtures/example.json'), '--bucket', 'cspm-demo-bucket'], capture_output=True, text=True, check=True)
         self.assertEqual(cspm.scan(json.loads(repair.stdout))['summary'], {'FAILED': 2, 'PASSED': 2})
 
+    def test_gcp_and_aws_resources_scan_together(self):
+        snapshot = deepcopy(EXAMPLE)
+        snapshot['gcp_firewall_rules'] = json.loads((ROOT / 'fixtures/gcp-example.json').read_text())['gcp_firewall_rules']
+        report = cspm.scan(snapshot)
+        self.assertEqual(report['summary'], {'FAILED': 4, 'PASSED': 4})
+        failed = {(c['control_id'], c['resource']) for c in report['checks'] if c['status'] == 'FAILED'}
+        self.assertIn(('GCP.FW.1', 'allow-ssh-from-anywhere'), failed)
+
     def test_evaluation_reports_mismatches(self):
         case = deepcopy(CASES[0])
         case['expected']['IAM.1'] = 'PASSED'

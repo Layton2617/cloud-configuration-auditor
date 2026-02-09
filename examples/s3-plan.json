@@ -1,0 +1,19 @@
+{
+  "mode": "local_simulation_only",
+  "resource": "cspm-demo-bucket",
+  "control_id": "S3.8",
+  "before": {
+    "BlockPublicAcls": true,
+    "IgnorePublicAcls": true,
+    "BlockPublicPolicy": false,
+    "RestrictPublicBuckets": true
+  },
+  "after": {
+    "BlockPublicAcls": true,
+    "IgnorePublicAcls": true,
+    "BlockPublicPolicy": true,
+    "RestrictPublicBuckets": true
+  },
+  "change_required": true,
+  "impact": "Blocking public access can break intentional public access. This command makes no AWS API calls."
+}

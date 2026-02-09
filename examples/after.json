@@ -1,0 +1,85 @@
+{
+  "mode": "offline_snapshot",
+  "source": "local repair simulation; not AWS state",
+  "summary": {
+    "FAILED": 2,
+    "PASSED": 2
+  },
+  "checks": [
+    {
+      "control_id": "IAM.1",
+      "resource": "arn:aws:iam::123456789012:policy/admin-string",
+      "status": "FAILED",
+      "control_severity": "High",
+      "title": "IAM policies should not allow full administrative privileges",
+      "evidence": {
+        "statements": [
+          {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "*"
+          }
+        ]
+      },
+      "explanation": "Checks explicit Allow Action=* Resource=* statements in a customer-managed policy. This is not an effective-permissions or privilege-escalation analysis; conditions, denies, attachments and organization policies can affect actual access.",
+      "remediation": "Review required operations and replace broad permissions with a reviewed policy. This tool does not generate or apply IAM policy replacements."
+    },
+    {
+      "control_id": "S3.8",
+      "resource": "cspm-demo-bucket",
+      "status": "PASSED",
+      "control_severity": "High",
+      "title": "S3 buckets should block public access at the bucket level",
+      "evidence": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+          "BlockPublicPolicy": true,
+          "RestrictPublicBuckets": true
+        },
+        "disabled_flags": []
+      },
+      "explanation": "Checks bucket-level Block Public Access only. Missing flags do not establish public access or data exposure; account settings, policies and ACLs also matter.",
+      "remediation": "Review the bucket's intended use, then enable all four bucket-level flags. The repair command only changes a local snapshot."
+    },
+    {
+      "control_id": "EC2.13",
+      "resource": "sg-demo",
+      "status": "FAILED",
+      "control_severity": "High",
+      "title": "Security groups should not allow unrestricted SSH ingress",
+      "evidence": {
+        "rules": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "IpRanges": [
+              {
+                "CidrIp": "0.0.0.0/0"
+              }
+            ],
+            "Ipv6Ranges": []
+          }
+        ],
+        "unresolved_prefix_lists": []
+      },
+      "explanation": "Checks direct world-open TCP ingress covering port 22, including all-protocol rules. A match alone does not prove internet reachability; routes, addresses, NACLs and resource attachments are not evaluated. Prefix lists are outside this check.",
+      "remediation": "Remove the world-open ingress rule or restrict it to the required source network after reviewing legitimate access requirements."
+    },
+    {
+      "control_id": "EC2.14",
+      "resource": "sg-demo",
+      "status": "PASSED",
+      "control_severity": "High",
+      "title": "Security groups should not allow unrestricted RDP ingress",
+      "evidence": {
+        "rules": [],
+        "unresolved_prefix_lists": []
+      },
+      "explanation": "Checks direct world-open TCP ingress covering port 3389, including all-protocol rules. A match alone does not prove internet reachability; routes, addresses, NACLs and resource attachments are not evaluated. Prefix lists are outside this check.",
+      "remediation": "Remove the world-open ingress rule or restrict it to the required source network after reviewing legitimate access requirements."
+    }
+  ],
+  "scope": "Four configuration checks across supplied resources, not an account-wide security assessment. Control IDs indicate the targeted AWS rule semantics; this tool is not Security Hub."
+}

@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["iam:ListPolicies", "ec2:DescribeSecurityGroups", "s3:ListAllMyBuckets"],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iam:GetPolicyVersion",
+      "Resource": "arn:aws:iam::<ACCOUNT_ID>:policy/*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetBucketPublicAccessBlock",
+      "Resource": "arn:aws:s3:::*"
+    }
+  ]
+}

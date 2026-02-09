@@ -1,0 +1,669 @@
+[
+  {
+    "id": "admin-string",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/admin-string",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "FAILED"
+    }
+  },
+  {
+    "id": "admin-list",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/admin-list",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "s3:GetObject",
+                  "*"
+                ],
+                "Resource": [
+                  "*"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "FAILED"
+    }
+  },
+  {
+    "id": "deny-star",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/deny-star",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": {
+              "Effect": "Deny",
+              "Action": "*",
+              "Resource": "*"
+            }
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "PASSED"
+    }
+  },
+  {
+    "id": "specific-action-star-resource",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/specific-action-star-resource",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": {
+              "Effect": "Allow",
+              "Action": "s3:ListAllMyBuckets",
+              "Resource": "*"
+            }
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "PASSED"
+    }
+  },
+  {
+    "id": "service-wildcard",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/service-wildcard",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": {
+              "Effect": "Allow",
+              "Action": "s3:*",
+              "Resource": "*"
+            }
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "PASSED"
+    }
+  },
+  {
+    "id": "conditional-admin",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/conditional-admin",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*",
+              "Condition": {
+                "Bool": {
+                  "aws:MultiFactorAuthPresent": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "FAILED"
+    }
+  },
+  {
+    "id": "permissions-boundary",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/permissions-boundary",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": {
+              "Effect": "Allow",
+              "Action": "*",
+              "Resource": "*"
+            }
+          },
+          "IsPermissionsBoundary": true
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "NOT_APPLICABLE"
+    }
+  },
+  {
+    "id": "iam-collection-error",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::123456789012:policy/unreadable",
+          "CollectionError": {
+            "Code": "AccessDenied"
+          }
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "UNKNOWN"
+    }
+  },
+  {
+    "id": "aws-managed-out-of-scope",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [
+        {
+          "Arn": "arn:aws:iam::aws:policy/AdministratorAccess"
+        }
+      ],
+      "s3_buckets": [],
+      "security_groups": []
+    },
+    "expected": {
+      "IAM.1": "NOT_APPLICABLE"
+    }
+  },
+  {
+    "id": "s3-all-blocked",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "private-bucket",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "IgnorePublicAcls": true,
+            "BlockPublicPolicy": true,
+            "RestrictPublicBuckets": true
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "PASSED"
+    }
+  },
+  {
+    "id": "s3-disabled-BlockPublicAcls",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "demo-bucket",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": false,
+            "IgnorePublicAcls": true,
+            "BlockPublicPolicy": true,
+            "RestrictPublicBuckets": true
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "FAILED"
+    }
+  },
+  {
+    "id": "s3-disabled-IgnorePublicAcls",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "demo-bucket",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "IgnorePublicAcls": false,
+            "BlockPublicPolicy": true,
+            "RestrictPublicBuckets": true
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "FAILED"
+    }
+  },
+  {
+    "id": "s3-disabled-BlockPublicPolicy",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "demo-bucket",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "IgnorePublicAcls": true,
+            "BlockPublicPolicy": false,
+            "RestrictPublicBuckets": true
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "FAILED"
+    }
+  },
+  {
+    "id": "s3-disabled-RestrictPublicBuckets",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "demo-bucket",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true,
+            "IgnorePublicAcls": true,
+            "BlockPublicPolicy": true,
+            "RestrictPublicBuckets": false
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "FAILED"
+    }
+  },
+  {
+    "id": "s3-absent-configuration",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "unconfigured-bucket",
+          "PublicAccessBlockConfiguration": null
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "FAILED"
+    }
+  },
+  {
+    "id": "s3-incomplete-snapshot",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "partial-bucket",
+          "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": true
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "UNKNOWN"
+    }
+  },
+  {
+    "id": "s3-collection-error",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [
+        {
+          "Name": "unreadable-bucket",
+          "CollectionError": {
+            "Code": "AccessDenied"
+          }
+        }
+      ],
+      "security_groups": []
+    },
+    "expected": {
+      "S3.8": "UNKNOWN"
+    }
+  },
+  {
+    "id": "ssh-ipv4",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-ssh-ipv4",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 22,
+              "ToPort": 22,
+              "IpRanges": [
+                {
+                  "CidrIp": "0.0.0.0/0"
+                }
+              ],
+              "Ipv6Ranges": []
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "FAILED",
+      "EC2.14": "PASSED"
+    }
+  },
+  {
+    "id": "rdp-ipv6",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-rdp-ipv6",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 3389,
+              "ToPort": 3389,
+              "IpRanges": [],
+              "Ipv6Ranges": [
+                {
+                  "CidrIpv6": "::/0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "PASSED",
+      "EC2.14": "FAILED"
+    }
+  },
+  {
+    "id": "port-range",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-port-range",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 20,
+              "ToPort": 3400,
+              "IpRanges": [
+                {
+                  "CidrIp": "0.0.0.0/0"
+                }
+              ],
+              "Ipv6Ranges": []
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "FAILED",
+      "EC2.14": "FAILED"
+    }
+  },
+  {
+    "id": "all-protocols",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-all-protocols",
+          "IpPermissions": [
+            {
+              "IpProtocol": "-1",
+              "Ipv6Ranges": [
+                {
+                  "CidrIpv6": "::/0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "FAILED",
+      "EC2.14": "FAILED"
+    }
+  },
+  {
+    "id": "private-source",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-private-source",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 22,
+              "ToPort": 22,
+              "IpRanges": [
+                {
+                  "CidrIp": "10.0.0.0/8"
+                }
+              ],
+              "Ipv6Ranges": []
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "PASSED",
+      "EC2.14": "PASSED"
+    }
+  },
+  {
+    "id": "web-only",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-web-only",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 443,
+              "ToPort": 443,
+              "IpRanges": [
+                {
+                  "CidrIp": "0.0.0.0/0"
+                }
+              ],
+              "Ipv6Ranges": []
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "PASSED",
+      "EC2.14": "PASSED"
+    }
+  },
+  {
+    "id": "udp-only",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-udp-only",
+          "IpPermissions": [
+            {
+              "IpProtocol": "udp",
+              "FromPort": 22,
+              "ToPort": 22,
+              "IpRanges": [
+                {
+                  "CidrIp": "0.0.0.0/0"
+                }
+              ],
+              "Ipv6Ranges": []
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "PASSED",
+      "EC2.14": "PASSED"
+    }
+  },
+  {
+    "id": "numeric-tcp",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-numeric-tcp",
+          "IpPermissions": [
+            {
+              "IpProtocol": "6",
+              "FromPort": 22,
+              "ToPort": 22,
+              "IpRanges": [
+                {
+                  "CidrIp": "0.0.0.0/0"
+                }
+              ],
+              "Ipv6Ranges": []
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "FAILED",
+      "EC2.14": "PASSED"
+    }
+  },
+  {
+    "id": "unresolved-prefix-list",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-unresolved-prefix-list",
+          "IpPermissions": [
+            {
+              "IpProtocol": "tcp",
+              "FromPort": 22,
+              "ToPort": 22,
+              "PrefixListIds": [
+                {
+                  "PrefixListId": "pl-example"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "UNKNOWN",
+      "EC2.14": "PASSED"
+    }
+  },
+  {
+    "id": "sg-collection-error",
+    "snapshot": {
+      "source": "synthetic test fixture",
+      "iam_policies": [],
+      "s3_buckets": [],
+      "security_groups": [
+        {
+          "GroupId": "sg-unreadable",
+          "CollectionError": {
+            "Code": "UnauthorizedOperation"
+          }
+        }
+      ]
+    },
+    "expected": {
+      "EC2.13": "UNKNOWN",
+      "EC2.14": "UNKNOWN"
+    }
+  }
+]

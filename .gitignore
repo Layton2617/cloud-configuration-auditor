@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+repaired.json
+live-*.json
+live-*.md

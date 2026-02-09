@@ -1,0 +1,297 @@
+{
+  "scope": "Hand-authored synthetic regression cases, not a held-out accuracy benchmark.",
+  "cases": 27,
+  "matched": 27,
+  "outcomes": [
+    {
+      "id": "admin-string",
+      "expected": {
+        "IAM.1": "FAILED"
+      },
+      "actual": {
+        "IAM.1": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "admin-list",
+      "expected": {
+        "IAM.1": "FAILED"
+      },
+      "actual": {
+        "IAM.1": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "deny-star",
+      "expected": {
+        "IAM.1": "PASSED"
+      },
+      "actual": {
+        "IAM.1": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "specific-action-star-resource",
+      "expected": {
+        "IAM.1": "PASSED"
+      },
+      "actual": {
+        "IAM.1": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "service-wildcard",
+      "expected": {
+        "IAM.1": "PASSED"
+      },
+      "actual": {
+        "IAM.1": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "conditional-admin",
+      "expected": {
+        "IAM.1": "FAILED"
+      },
+      "actual": {
+        "IAM.1": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "permissions-boundary",
+      "expected": {
+        "IAM.1": "NOT_APPLICABLE"
+      },
+      "actual": {
+        "IAM.1": "NOT_APPLICABLE"
+      },
+      "matched": true
+    },
+    {
+      "id": "iam-collection-error",
+      "expected": {
+        "IAM.1": "UNKNOWN"
+      },
+      "actual": {
+        "IAM.1": "UNKNOWN"
+      },
+      "matched": true
+    },
+    {
+      "id": "aws-managed-out-of-scope",
+      "expected": {
+        "IAM.1": "NOT_APPLICABLE"
+      },
+      "actual": {
+        "IAM.1": "NOT_APPLICABLE"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-all-blocked",
+      "expected": {
+        "S3.8": "PASSED"
+      },
+      "actual": {
+        "S3.8": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-disabled-BlockPublicAcls",
+      "expected": {
+        "S3.8": "FAILED"
+      },
+      "actual": {
+        "S3.8": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-disabled-IgnorePublicAcls",
+      "expected": {
+        "S3.8": "FAILED"
+      },
+      "actual": {
+        "S3.8": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-disabled-BlockPublicPolicy",
+      "expected": {
+        "S3.8": "FAILED"
+      },
+      "actual": {
+        "S3.8": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-disabled-RestrictPublicBuckets",
+      "expected": {
+        "S3.8": "FAILED"
+      },
+      "actual": {
+        "S3.8": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-absent-configuration",
+      "expected": {
+        "S3.8": "FAILED"
+      },
+      "actual": {
+        "S3.8": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-incomplete-snapshot",
+      "expected": {
+        "S3.8": "UNKNOWN"
+      },
+      "actual": {
+        "S3.8": "UNKNOWN"
+      },
+      "matched": true
+    },
+    {
+      "id": "s3-collection-error",
+      "expected": {
+        "S3.8": "UNKNOWN"
+      },
+      "actual": {
+        "S3.8": "UNKNOWN"
+      },
+      "matched": true
+    },
+    {
+      "id": "ssh-ipv4",
+      "expected": {
+        "EC2.13": "FAILED",
+        "EC2.14": "PASSED"
+      },
+      "actual": {
+        "EC2.13": "FAILED",
+        "EC2.14": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "rdp-ipv6",
+      "expected": {
+        "EC2.13": "PASSED",
+        "EC2.14": "FAILED"
+      },
+      "actual": {
+        "EC2.13": "PASSED",
+        "EC2.14": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "port-range",
+      "expected": {
+        "EC2.13": "FAILED",
+        "EC2.14": "FAILED"
+      },
+      "actual": {
+        "EC2.13": "FAILED",
+        "EC2.14": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "all-protocols",
+      "expected": {
+        "EC2.13": "FAILED",
+        "EC2.14": "FAILED"
+      },
+      "actual": {
+        "EC2.13": "FAILED",
+        "EC2.14": "FAILED"
+      },
+      "matched": true
+    },
+    {
+      "id": "private-source",
+      "expected": {
+        "EC2.13": "PASSED",
+        "EC2.14": "PASSED"
+      },
+      "actual": {
+        "EC2.13": "PASSED",
+        "EC2.14": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "web-only",
+      "expected": {
+        "EC2.13": "PASSED",
+        "EC2.14": "PASSED"
+      },
+      "actual": {
+        "EC2.13": "PASSED",
+        "EC2.14": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "udp-only",
+      "expected": {
+        "EC2.13": "PASSED",
+        "EC2.14": "PASSED"
+      },
+      "actual": {
+        "EC2.13": "PASSED",
+        "EC2.14": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "numeric-tcp",
+      "expected": {
+        "EC2.13": "FAILED",
+        "EC2.14": "PASSED"
+      },
+      "actual": {
+        "EC2.13": "FAILED",
+        "EC2.14": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "unresolved-prefix-list",
+      "expected": {
+        "EC2.13": "UNKNOWN",
+        "EC2.14": "PASSED"
+      },
+      "actual": {
+        "EC2.13": "UNKNOWN",
+        "EC2.14": "PASSED"
+      },
+      "matched": true
+    },
+    {
+      "id": "sg-collection-error",
+      "expected": {
+        "EC2.13": "UNKNOWN",
+        "EC2.14": "UNKNOWN"
+      },
+      "actual": {
+        "EC2.13": "UNKNOWN",
+        "EC2.14": "UNKNOWN"
+      },
+      "matched": true
+    }
+  ]
+}

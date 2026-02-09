@@ -1,0 +1,45 @@
+{
+  "source": "synthetic demo; no real AWS resources",
+  "iam_policies": [
+    {
+      "Arn": "arn:aws:iam::123456789012:policy/admin-string",
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": {
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      }
+    }
+  ],
+  "s3_buckets": [
+    {
+      "Name": "cspm-demo-bucket",
+      "PublicAccessBlockConfiguration": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": true
+      }
+    }
+  ],
+  "security_groups": [
+    {
+      "GroupId": "sg-demo",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 22,
+          "ToPort": 22,
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "Ipv6Ranges": []
+        }
+      ]
+    }
+  ]
+}
